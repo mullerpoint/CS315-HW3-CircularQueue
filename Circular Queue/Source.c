@@ -19,14 +19,14 @@
 
 
 //Gloabal Variables and Defines
-	//Structure Type Definition for a linked list structure
-	typedef struct Queue
-	{
-		//"payload"
-		int itemData;
-		//pointer to next item
-		struct Queue *nextItem;
-	}QUEUE_ITEM;
+//Structure Type Definition for a linked list structure
+typedef struct Queue
+{
+	//"payload"
+	int itemData;
+	//pointer to next item
+	struct Queue *nextItem;
+}QUEUE_ITEM;
 
 
 //Function Prototypes
@@ -44,7 +44,7 @@ main()
 
 	//Queue Declaration
 
-	QUEUE_ITEM *ptrToQueueA = NULL; 
+	QUEUE_ITEM *ptrToQueueA = NULL;
 
 	//loop for program body
 	while (activity != 'q')
@@ -61,14 +61,17 @@ main()
 		case 'i':
 			//insert case
 			//query user for number to add
-				printf("Value to be inserted: ");
-				scanf(" %d", &tempItemData);
+			printf("Value to be inserted: ");
+			scanf(" %d", &tempItemData);
+
 			//add number to queue
-				addItem(&(ptrToQueueA), tempItemData);
+			addItem(&(ptrToQueueA), tempItemData);
+
 			//print new queue for user
-				//queue header
-				printf("\nThe queue is currently:\n");
-				printQueue(&(ptrToQueueA));
+			//queue header
+			printf("\nThe queue is currently:\n");
+			printQueue(&(ptrToQueueA));
+
 			break;
 
 		case 'r':
@@ -77,28 +80,32 @@ main()
 			if (ptrToQueueA != NULL)
 			{
 				//remove next item from the queue
-					removeItem(&(ptrToQueueA));
+				removeItem(&(ptrToQueueA));
+
 				//print new queue
-					//queue header
-					printf("\nThe queue is currently:\n");
-					printQueue(&(ptrToQueueA));
+				//queue header
+				printf("\nThe queue is currently:\n");
+				printQueue(&(ptrToQueueA));
 			}
+
 			//the queue is already empty
 			else
 			{
 				//inform the user they are a fool
 				printf("The queue is currently empty\n\n");
 			}
-			
+
 			break;
 
 		case 'q':
 			//quit case
 			//print the final queue
-				printf("Your final queue was: ");
-				printQueue(&(ptrToQueueA));
+			printf("Your final queue was: ");
+			printQueue(&(ptrToQueueA));
+
 			//quit gracefully
-				printf("\n\nBye\n");
+			printf("\n\nBye\n");
+
 			break;
 
 		default:
@@ -114,16 +121,21 @@ main()
 //function that adds an item to the queue
 int addItem(QUEUE_ITEM **queuePtr, int newItemData)
 {
+	//get memory for new insert
+	QUEUE_ITEM *newQueueItemPtr = NULL;
+	newQueueItemPtr = malloc(sizeof(QUEUE_ITEM));
+	
+	//build the queue item
+	//set the items data to the data to what the user input
+	newQueueItemPtr->itemData = newItemData;
+	//set the next item to itself
+	newQueueItemPtr->nextItem = newQueueItemPtr;
+	
 	//insert to empty queue
-	if (true)
+	if (*queuePtr == NULL)
 	{
-
-		//return success
-		return 1;
-	}
-	//insert to queue with only one item
-	else if (true)
-	{
+		//set the queue pointer to the new rear of the queue
+		*queuePtr = newQueueItemPtr;
 
 		//return success
 		return 1;
@@ -131,11 +143,19 @@ int addItem(QUEUE_ITEM **queuePtr, int newItemData)
 	//generall insert case
 	else
 	{
+		//set newitem to point at what the rear points at points at
+		newQueueItemPtr->nextItem = (*queuePtr)->nextItem;
+
+		//set former rear to point at new rear
+		(*queuePtr)->nextItem = newQueueItemPtr;
+
+		//update the rear of the list
+		*queuePtr = newQueueItemPtr;
 
 		//return success
 		return 1;
 	}
-	
+
 	//return failure
 	return 0;
 }//addItem()
@@ -144,20 +164,26 @@ int addItem(QUEUE_ITEM **queuePtr, int newItemData)
 //function that removes a specific item from the specified queue
 int removeItem(QUEUE_ITEM **queuePtr)
 {
-	
+
 	//no items in queue
 	if (*queuePtr == NULL)
 	{
+		//there is nothing to do
 		printf("The queue is currently empty\n\n");
-		
+
 		//return success
 		return 1;
 	}
 	//only one item in queue
 	else if ((*queuePtr)->nextItem == (*queuePtr))
 	{
+		//get the item to be removed
 		QUEUE_ITEM *removalPtr = (*queuePtr);
+		
+		//becuase this is the only item in the queue set the queue to empty/NULL
 		(*queuePtr) = NULL;
+		
+		//remove the item
 		free(removalPtr);
 
 		//return success
@@ -166,14 +192,19 @@ int removeItem(QUEUE_ITEM **queuePtr)
 	//normal removal
 	else
 	{
-		QUEUE_ITEM *removalPtr = (*queuePtr);
-		(*queuePtr) = (*queuePtr)->nextItem;
-		free(removalPtr);
+		//get the item to be removed
+		QUEUE_ITEM *removalPtr = (*queuePtr)->nextItem;
+
+		//set the rear to point at the new front
+		(*queuePtr)->nextItem = removalPtr->nextItem;
 		
+		//remove the old front
+		free(removalPtr);
+
 		//return success
 		return 1;
 	}
-	
+
 
 
 
@@ -184,20 +215,22 @@ int removeItem(QUEUE_ITEM **queuePtr)
 //function that traverses the specified queu and prints out every item
 int printQueue(QUEUE_ITEM **queuePtr)
 {
-	//queue traversal pointer
-	QUEUE_ITEM *queueTraversalPtr = *queuePtr;
-
 	//check if the queue is empty
-	if (queueTraversalPtr == NULL)
+	if ((*queuePtr) == NULL)
 	{
 		printf("\n");
 		//return success
 		return 1;
 	}
+
 	else //the queue does not start with NULL ie: its not empty
 	{
+		//queue traversal pointer
+		QUEUE_ITEM *queueTraversalPtr = (*queuePtr)->nextItem;
+
 		//side decalration
 		printf(" front -> ");
+
 		//loop to print all the items in the queue stop when you get back to the start
 		do
 		{
@@ -209,12 +242,15 @@ int printQueue(QUEUE_ITEM **queuePtr)
 			{
 				printf(" -> ");
 			}
+
 			//traverse to the next item in the queue
 			queueTraversalPtr = queueTraversalPtr->nextItem;
-		} while (queueTraversalPtr != *queuePtr);
+
+		} while (queueTraversalPtr != (*queuePtr)->nextItem);
 
 		//side decaration
-		printf(" -> rear");
+		printf("rear");
+
 		//print newlines after the queue to indicate completion 
 		printf("\n\n");
 
