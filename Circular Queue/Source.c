@@ -30,8 +30,8 @@ typedef struct Queue
 
 
 //Function Prototypes
-int addItem(QUEUE_ITEM**, int);
-int removeItem(QUEUE_ITEM**);
+int addItem(QUEUE_ITEM**, char);
+QUEUE_ITEM* removeItem(QUEUE_ITEM**);
 int printQueue(QUEUE_ITEM**); //TEMP FUNCTION FOR TESTING PURPOSES 
 //
 
@@ -40,7 +40,7 @@ main()
 {
 	//Variable Declarations
 	char activity = ' ';
-	int tempItemData = -1;
+	char tempItemData = ' ';
 
 	//Queue Declaration
 
@@ -50,7 +50,7 @@ main()
 	while (activity != 'q')
 	{
 		//query user for input on next action and normalize input
-		printf("What do you want to do? [Enter i for insert, r for remove, or q to quit]: ");
+		printf(" Enter \"i\" to insert a new element, \"r\" to remove an element,  \"q\" to quit:");
 		scanf(" %c", &activity);
 		activity = tolower(activity); //make all inputs lowercase
 
@@ -61,16 +61,16 @@ main()
 		case 'i':
 			//insert case
 			//query user for number to add
-			printf("Value to be inserted: ");
-			scanf(" %d", &tempItemData);
+			printf("Enter character to be enqueued (inserted): ");
+			scanf(" %c", &tempItemData);
 
 			//add number to queue
 			addItem(&(ptrToQueueA), tempItemData);
 
 			//print new queue for user
 			//queue header
-			printf("\nThe queue is currently:\n");
-			printQueue(&(ptrToQueueA));
+			//printf("\nThe queue is currently:\n");
+			//printQueue(&(ptrToQueueA));
 
 			break;
 
@@ -79,13 +79,17 @@ main()
 			//only bother asking for a removal input if there is anything that could be removed
 			if (ptrToQueueA != NULL)
 			{
+				//return variable
+				QUEUE_ITEM *returnedItem;
+
 				//remove next item from the queue
-				removeItem(&(ptrToQueueA));
+				returnedItem = removeItem(&(ptrToQueueA));
 
 				//print new queue
 				//queue header
-				printf("\nThe queue is currently:\n");
-				printQueue(&(ptrToQueueA));
+				//printf("\nThe queue is currently:\n");
+				//printQueue(&(ptrToQueueA));
+				printf("The character removed was an \"%c\"\n\n", (returnedItem->itemData));
 			}
 
 			//the queue is already empty
@@ -100,8 +104,8 @@ main()
 		case 'q':
 			//quit case
 			//print the final queue
-			printf("Your final queue was: ");
-			printQueue(&(ptrToQueueA));
+			//printf("Your final queue was: ");
+			//printQueue(&(ptrToQueueA));
 
 			//quit gracefully
 			printf("\n\nBye\n");
@@ -119,7 +123,7 @@ main()
 
 
 //function that adds an item to the queue
-int addItem(QUEUE_ITEM **queuePtr, int newItemData)
+int addItem(QUEUE_ITEM **queuePtr, char newItemData)
 {
 	//get memory for new insert
 	QUEUE_ITEM *newQueueItemPtr = NULL;
@@ -162,7 +166,7 @@ int addItem(QUEUE_ITEM **queuePtr, int newItemData)
 
 
 //function that removes a specific item from the specified queue
-int removeItem(QUEUE_ITEM **queuePtr)
+QUEUE_ITEM* removeItem(QUEUE_ITEM **queuePtr)
 {
 
 	//no items in queue
@@ -172,7 +176,7 @@ int removeItem(QUEUE_ITEM **queuePtr)
 		printf("The queue is currently empty\n\n");
 
 		//return success
-		return 1;
+		return NULL;
 	}
 	//only one item in queue
 	else if ((*queuePtr)->nextItem == (*queuePtr))
@@ -183,11 +187,8 @@ int removeItem(QUEUE_ITEM **queuePtr)
 		//becuase this is the only item in the queue set the queue to empty/NULL
 		(*queuePtr) = NULL;
 		
-		//remove the item
-		free(removalPtr);
-
 		//return success
-		return 1;
+		return removalPtr;
 	}
 	//normal removal
 	else
@@ -197,18 +198,15 @@ int removeItem(QUEUE_ITEM **queuePtr)
 
 		//set the rear to point at the new front
 		(*queuePtr)->nextItem = removalPtr->nextItem;
-		
-		//remove the old front
-		free(removalPtr);
 
 		//return success
-		return 1;
+		return removalPtr;
 	}
 
 
 
 
-	return 0;
+	return NULL;
 }//removeItem()
 
 
@@ -235,7 +233,7 @@ int printQueue(QUEUE_ITEM **queuePtr)
 		do
 		{
 			//print the item data
-			printf("%d", queueTraversalPtr->itemData);
+			printf("%c", queueTraversalPtr->itemData);
 
 			//if its not the last item print an arrow
 			if (queueTraversalPtr->nextItem != NULL)
