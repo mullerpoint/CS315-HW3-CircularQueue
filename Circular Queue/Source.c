@@ -32,7 +32,7 @@ typedef struct Queue
 //Function Prototypes
 int addItem(QUEUE_ITEM**, char);
 QUEUE_ITEM* removeItem(QUEUE_ITEM**);
-int printQueue(QUEUE_ITEM**); //TEMP FUNCTION FOR TESTING PURPOSES 
+//int printQueue(QUEUE_ITEM**); //FUNCTION FOR TESTING PURPOSES 
 //
 
 
@@ -67,11 +67,6 @@ main()
 			//add number to queue
 			addItem(&(ptrToQueueA), tempItemData);
 
-			//print new queue for user
-			//queue header
-			//printf("\nThe queue is currently:\n");
-			//printQueue(&(ptrToQueueA));
-
 			break;
 
 		case 'r':
@@ -85,11 +80,9 @@ main()
 				//remove next item from the queue
 				returnedItem = removeItem(&(ptrToQueueA));
 
-				//print new queue
-				//queue header
-				//printf("\nThe queue is currently:\n");
-				//printQueue(&(ptrToQueueA));
+				//print the returned item and free the memory
 				printf("The character removed was an \"%c\"\n\n", (returnedItem->itemData));
+				free(returnedItem);
 			}
 
 			//the queue is already empty
@@ -210,53 +203,53 @@ QUEUE_ITEM* removeItem(QUEUE_ITEM **queuePtr)
 }//removeItem()
 
 
-//function that traverses the specified queu and prints out every item
-int printQueue(QUEUE_ITEM **queuePtr)
-{
-	//check if the queue is empty
-	if ((*queuePtr) == NULL)
-	{
-		printf("\n");
-		//return success
-		return 1;
-	}
-
-	else //the queue does not start with NULL ie: its not empty
-	{
-		//queue traversal pointer
-		QUEUE_ITEM *queueTraversalPtr = (*queuePtr)->nextItem;
-
-		//side decalration
-		printf(" front -> ");
-
-		//loop to print all the items in the queue stop when you get back to the start
-		do
-		{
-			//print the item data
-			printf("%c", queueTraversalPtr->itemData);
-
-			//if its not the last item print an arrow
-			if (queueTraversalPtr->nextItem != NULL)
-			{
-				printf(" -> ");
-			}
-
-			//traverse to the next item in the queue
-			queueTraversalPtr = queueTraversalPtr->nextItem;
-
-		} while (queueTraversalPtr != (*queuePtr)->nextItem);
-
-		//side decaration
-		printf("rear");
-
-		//print newlines after the queue to indicate completion 
-		printf("\n\n");
-
-		//return success
-		return 1;
-
-	}//else
-
-	//return failure
-	return 0;
-}//printQueue
+////function that traverses the specified queu and prints out every item
+//int printQueue(QUEUE_ITEM **queuePtr)
+//{
+//	//check if the queue is empty
+//	if ((*queuePtr) == NULL)
+//	{
+//		printf("\n");
+//		//return success
+//		return 1;
+//	}
+//
+//	else //the queue does not start with NULL ie: its not empty
+//	{
+//		//queue traversal pointer
+//		QUEUE_ITEM *queueTraversalPtr = (*queuePtr)->nextItem;
+//
+//		//side decalration
+//		printf(" front -> ");
+//
+//		//loop to print all the items in the queue stop when you get back to the start
+//		do
+//		{
+//			//print the item data
+//			printf("%c", queueTraversalPtr->itemData);
+//
+//			//if its not the last item print an arrow
+//			if (queueTraversalPtr->nextItem != NULL)
+//			{
+//				printf(" -> ");
+//			}
+//
+//			//traverse to the next item in the queue
+//			queueTraversalPtr = queueTraversalPtr->nextItem;
+//
+//		} while (queueTraversalPtr != (*queuePtr)->nextItem);
+//
+//		//side decaration
+//		printf("rear");
+//
+//		//print newlines after the queue to indicate completion 
+//		printf("\n\n");
+//
+//		//return success
+//		return 1;
+//
+//	}//else
+//
+//	//return failure
+//	return 0;
+//}//printQueue
